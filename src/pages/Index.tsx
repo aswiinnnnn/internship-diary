@@ -57,6 +57,7 @@ const Index = () => {
             return true;
           }}
           initial={editEntry}
+          existingDates={entries.map((e) => e.date)}
         />
       )}
     </div>
