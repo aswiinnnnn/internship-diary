@@ -15,7 +15,7 @@ function CopyButton({ text, label }: { text: string; label: string }) {
     toast.success(`${label} copied`);
   };
   return (
-    <button onClick={copy} className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 border-foreground hover:bg-secondary transition-colors" title={`Copy ${label}`}>
+    <button onClick={copy} className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 border-foreground shadow-brutal-sm hover:bg-secondary transition-all" title={`Copy ${label}`}>
       <Copy size={14} />
     </button>
   );
@@ -35,7 +35,7 @@ export function DiaryCard({ entry, onEdit }: DiaryCardProps) {
   ];
 
   return (
-    <div className="bg-card border-3 border-foreground rounded-lg overflow-hidden">
+    <div className="bg-card border-3 border-foreground rounded-lg overflow-hidden shadow-brutal">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-secondary/50 transition-colors">
         <span className="font-bold text-base">{dateLabel}</span>
         {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -44,7 +44,7 @@ export function DiaryCard({ entry, onEdit }: DiaryCardProps) {
       {open && (
         <div className="border-t-3 border-foreground">
           <div className="px-6 py-3 flex justify-end">
-            <button onClick={() => onEdit(entry)} className="flex items-center gap-1.5 px-4 py-1.5 border-2 border-foreground rounded-lg font-bold text-sm hover:bg-accent transition-colors">
+            <button onClick={() => onEdit(entry)} className="flex items-center gap-1.5 px-4 py-1.5 border-2 border-foreground rounded-lg font-bold text-sm shadow-brutal-sm hover:bg-accent transition-all">
               <Pencil size={14} />
               Edit
             </button>

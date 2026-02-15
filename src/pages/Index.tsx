@@ -20,7 +20,7 @@ const Index = () => {
           </div>
           <button
             onClick={() => setShowCreate(true)}
-            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary text-primary-foreground font-bold rounded-lg border-3 border-foreground hover:opacity-90 transition-opacity"
+            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary text-primary-foreground font-bold rounded-lg border-3 border-foreground shadow-brutal hover:opacity-90 transition-all"
           >
             <Plus size={16} />
             Create

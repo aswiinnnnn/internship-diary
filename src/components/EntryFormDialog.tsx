@@ -43,10 +43,10 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/30">
-      <div className="relative w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto bg-card border-3 border-foreground rounded-lg p-6">
+      <div className="relative w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto bg-card border-3 border-foreground rounded-lg p-6 shadow-brutal">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold">{initial ? "Edit Entry" : "New Entry"}</h2>
-          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center border-2 border-foreground rounded-full hover:bg-secondary transition-colors">
+          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center border-2 border-foreground rounded-full shadow-brutal-sm hover:bg-secondary transition-all">
             <X size={18} />
           </button>
         </div>
@@ -56,7 +56,7 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Date</label>
             <Popover>
               <PopoverTrigger asChild>
-                <button className={cn("w-full flex items-center gap-2 px-4 py-3 border-3 border-foreground rounded-lg text-left", !date && "text-muted-foreground")}>
+                <button className={cn("w-full flex items-center gap-2 px-4 py-3 border-3 border-foreground rounded-lg text-left shadow-brutal-sm", !date && "text-muted-foreground")}>
                   <CalendarIcon size={16} />
                   {date ? format(date, "dd-MM-yyyy") : "Pick a date"}
                 </button>
@@ -69,30 +69,30 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
 
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Work Summary</label>
-            <textarea value={workSummary} onChange={(e) => setWorkSummary(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[100px] focus:outline-none focus:ring-2 focus:ring-ring" />
+            <textarea value={workSummary} onChange={(e) => setWorkSummary(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[100px] shadow-brutal-sm focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Hours Worked</label>
-            <input value={hoursWorked} onChange={(e) => setHoursWorked(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card focus:outline-none focus:ring-2 focus:ring-ring" />
+            <input value={hoursWorked} onChange={(e) => setHoursWorked(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card shadow-brutal-sm focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Show Your Work (Links)</label>
-            <textarea value={showYourWork} onChange={(e) => setShowYourWork(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[80px] focus:outline-none focus:ring-2 focus:ring-ring" />
+            <textarea value={showYourWork} onChange={(e) => setShowYourWork(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[80px] shadow-brutal-sm focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Learnings / Outcomes</label>
-            <textarea value={learnings} onChange={(e) => setLearnings(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[100px] focus:outline-none focus:ring-2 focus:ring-ring" />
+            <textarea value={learnings} onChange={(e) => setLearnings(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[100px] shadow-brutal-sm focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Blockers / Risks</label>
-            <textarea value={blockers} onChange={(e) => setBlockers(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[80px] focus:outline-none focus:ring-2 focus:ring-ring" />
+            <textarea value={blockers} onChange={(e) => setBlockers(e.target.value)} className="w-full px-4 py-3 border-3 border-foreground rounded-lg bg-card resize-none min-h-[80px] shadow-brutal-sm focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
-          <button onClick={handleSave} className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg border-3 border-foreground hover:opacity-90 transition-opacity">
+          <button onClick={handleSave} className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg border-3 border-foreground shadow-brutal hover:opacity-90 transition-all">
             {initial ? "Update" : "Save"}
           </button>
         </div>

@@ -57,3 +57,43 @@
     font-family: 'Space Mono', monospace;
   }
 }
+
+/* Neobrutalist shadow utility */
+.shadow-brutal {
+  box-shadow: 4px 4px 0px 0px hsl(var(--foreground));
+}
+
+.shadow-brutal-sm {
+  box-shadow: 2px 2px 0px 0px hsl(var(--foreground));
+}
+
+.shadow-brutal:active, .shadow-brutal-sm:active {
+  box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
+  transform: translate(1px, 1px);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+  border-left: 2px solid hsl(var(--foreground));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground));
+  border: 2px solid hsl(var(--secondary));
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--foreground)) hsl(var(--secondary));
+}
