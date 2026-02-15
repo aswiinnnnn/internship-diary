@@ -10,7 +10,7 @@ import { toast } from "sonner";
 interface EntryFormDialogProps {
   open: boolean;
   onClose: () => void;
-  onSave: (entry: Omit<DiaryEntry, "id">) => boolean | void;
+  onSave: (entry: Omit<DiaryEntry, "id">) => boolean | void | Promise<boolean | void>;
   initial?: DiaryEntry;
   existingDates?: string[];
 }
@@ -25,7 +25,7 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
 
   if (!open) return null;
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!date) {
       toast.error("Please select a date");
       return;
@@ -36,7 +36,7 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
       toast.error("An entry for this date already exists");
       return;
     }
-    const result = onSave({ date: dateStr, workSummary, hoursWorked, showYourWork, learnings, blockers });
+    const result = await onSave({ date: dateStr, workSummary, hoursWorked, showYourWork, learnings, blockers });
     if (result !== false) {
       onClose();
     }
