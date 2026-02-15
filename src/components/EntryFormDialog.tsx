@@ -31,7 +31,8 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
       return;
     }
     const dateStr = format(date, "yyyy-MM-dd");
-    if (!initial && existingDates.includes(dateStr)) {
+    const isDuplicate = existingDates.includes(dateStr) && (!initial || initial.date !== dateStr);
+    if (isDuplicate) {
       toast.error("An entry for this date already exists");
       return;
     }
@@ -62,7 +63,7 @@ export function EntryFormDialog({ open, onClose, onSave, initial, existingDates 
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 border-3 border-foreground" align="start">
-                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className="p-3 pointer-events-auto" disabled={!!initial} />
+                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className="p-3 pointer-events-auto" />
               </PopoverContent>
             </Popover>
           </div>
