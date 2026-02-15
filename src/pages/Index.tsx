@@ -37,12 +37,15 @@ const Index = () => {
         </div>
       </div>
 
-      <EntryFormDialog
-        open={showCreate}
-        onClose={() => setShowCreate(false)}
-        onSave={(data) => addEntry(data)}
-        existingDates={entries.map((e) => e.date)}
-      />
+      {showCreate && (
+        <EntryFormDialog
+          key="create-new"
+          open={true}
+          onClose={() => setShowCreate(false)}
+          onSave={(data) => addEntry(data)}
+          existingDates={entries.map((e) => e.date)}
+        />
+      )}
 
       {editEntry && (
         <EntryFormDialog
