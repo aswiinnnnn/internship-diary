@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 import dj_database_url
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -153,6 +154,11 @@ _cors_allowed_origins_env = os.environ.get(
 )
 CORS_ALLOWED_ORIGINS = [
     o.strip() for o in _cors_allowed_origins_env.split(",") if o.strip()
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "x-admin-username",
+    "x-admin-password",
 ]
 
 _csrf_trusted_origins_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")

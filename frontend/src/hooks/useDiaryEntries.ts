@@ -1,7 +1,43 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { DiaryEntry } from "@/types/diary";
 import { api } from "@/lib/api";
+import { DiaryEntry } from "@/types/diary";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+const ADMIN_USERNAME = "learneradmin";
+const ADMIN_PASSWORD = "admin@890";
+const ADMIN_AUTH_FLAG_KEY = "diaryAdminAuthed";
+const ADMIN_USER_KEY = "diaryAdminUser";
+const ADMIN_PASS_KEY = "diaryAdminPass";
+
+function getAdminHeaders(): Record<string, string> | undefined {
+  if (sessionStorage.getItem(ADMIN_AUTH_FLAG_KEY) !== "1") return undefined;
+  const username = sessionStorage.getItem(ADMIN_USER_KEY) || "";
+  const password = sessionStorage.getItem(ADMIN_PASS_KEY) || "";
+  if (!username || !password) return undefined;
+  return {
+    "X-Admin-Username": username,
+    "X-Admin-Password": password,
+  };
+}
+
+async function ensureAdminAuthenticated(): Promise<boolean> {
+  if (sessionStorage.getItem(ADMIN_AUTH_FLAG_KEY) === "1") return true;
+
+  const username = window.prompt("Enter admin username");
+  if (username == null) return false;
+  const password = window.prompt("Enter admin password");
+  if (password == null) return false;
+
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    sessionStorage.setItem(ADMIN_AUTH_FLAG_KEY, "1");
+    sessionStorage.setItem(ADMIN_USER_KEY, username);
+    sessionStorage.setItem(ADMIN_PASS_KEY, password);
+    return true;
+  }
+
+  toast.error("Invalid admin credentials");
+  return false;
+}
 
 export function useDiaryEntries() {
   const queryClient = useQueryClient();
@@ -16,7 +52,13 @@ export function useDiaryEntries() {
 
   const addEntryMutation = useMutation({
     mutationFn: async (entry: Omit<DiaryEntry, "id">) => {
-      const response = await api.post<DiaryEntry>("entries/", entry);
+      const ok = await ensureAdminAuthenticated();
+      if (!ok) {
+        throw new Error("Not authorized");
+      }
+      const response = await api.post<DiaryEntry>("entries/", entry, {
+        headers: getAdminHeaders(),
+      });
       return response.data;
     },
     onSuccess: () => {
@@ -35,7 +77,13 @@ export function useDiaryEntries() {
 
   const updateEntryMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Omit<DiaryEntry, "id"> }) => {
-      const response = await api.put<DiaryEntry>(`entries/${id}/`, data);
+      const ok = await ensureAdminAuthenticated();
+      if (!ok) {
+        throw new Error("Not authorized");
+      }
+      const response = await api.put<DiaryEntry>(`entries/${id}/`, data, {
+        headers: getAdminHeaders(),
+      });
       return response.data;
     },
     onSuccess: () => {
@@ -62,8 +110,13 @@ export function useDiaryEntries() {
     }
   };
 
-  const updateEntry = (id: string, data: Omit<DiaryEntry, "id">) => {
-    updateEntryMutation.mutate({ id, data });
+  const updateEntry = async (id: string, data: Omit<DiaryEntry, "id">) => {
+    try {
+      await updateEntryMutation.mutateAsync({ id, data });
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   return { entries, addEntry, updateEntry };

@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useDiaryEntries } from "@/hooks/useDiaryEntries";
 import { DiaryCard } from "@/components/DiaryCard";
 import { EntryFormDialog } from "@/components/EntryFormDialog";
+import { useDiaryEntries } from "@/hooks/useDiaryEntries";
 import { DiaryEntry } from "@/types/diary";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 
 const Index = () => {
   const { entries, addEntry, updateEntry } = useDiaryEntries();
@@ -51,10 +51,13 @@ const Index = () => {
         <EntryFormDialog
           open={true}
           onClose={() => setEditEntry(null)}
-          onSave={(data) => {
-            updateEntry(editEntry.id, data);
-            setEditEntry(null);
-            return true;
+          onSave={async (data) => {
+            const ok = await updateEntry(editEntry.id, data);
+            if (ok) {
+              setEditEntry(null);
+              return true;
+            }
+            return false;
           }}
           initial={editEntry}
           existingDates={entries.map((e) => e.date)}
