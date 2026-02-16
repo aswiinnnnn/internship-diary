@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +22,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-h0@-v+l)%08n3g4+6sn8w1q5qnf_@v%i)^nlklu)h%vp1k#y!j"
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-h0@-v+l)%08n3g4+6sn8w1q5qnf_@v%i)^nlklu)h%vp1k#y!j",
+)
+
+
+def _env_bool(name: str, default: bool = False) -> bool:
+    val = os.environ.get(name)
+    if val is None:
+        return default
+    return val.strip().lower() in {"1", "true", "yes", "y", "on"}
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _env_bool("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+_allowed_hosts_env = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts_env.split(",") if h.strip()]
 
 
 # Application definition
@@ -83,6 +97,14 @@ DATABASES = {
     }
 }
 
+_database_url = os.environ.get("DATABASE_URL")
+if _database_url:
+    DATABASES["default"] = dj_database_url.config(
+        default=_database_url,
+        conn_max_age=600,
+        ssl_require=True,
+    )
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -125,10 +147,19 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+_cors_allowed_origins_env = os.environ.get(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:5173,http://localhost:8082,http://localhost:8080",
+)
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:8082",
+    o.strip() for o in _cors_allowed_origins_env.split(",") if o.strip()
 ]
+
+_csrf_trusted_origins_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+if _csrf_trusted_origins_env.strip():
+    CSRF_TRUSTED_ORIGINS = [
+        o.strip() for o in _csrf_trusted_origins_env.split(",") if o.strip()
+    ]
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
